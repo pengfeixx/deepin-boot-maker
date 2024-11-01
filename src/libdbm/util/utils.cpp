@@ -468,7 +468,7 @@ QList<DeviceInfo> ListUsbDrives()
             bool needformat = true;
             DeviceInfo partitionInfo = diskinfo.children.value(strPartionName);
 
-            if (partitionInfo.fstype != "vfat") {
+            if (partitionInfo.fstype != "ext4") {
                 needformat = true;
             }
             else {

@@ -74,6 +74,7 @@ protected:
     bool m_bStop;
     QString m_strPartionName;
     QString m_strImage;
+    QString m_strMountName;
     ProgressStatus m_progressStatus;
     BMHandler::ErrorType m_progressError;
 };

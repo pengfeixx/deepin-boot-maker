@@ -372,7 +372,8 @@ bool QtBaseInstaller::formatUsb()
     }
 
     if (m_bFormat) {
-        if (!XSys::DiskUtil::FormatPartion(m_strPartionName)) {
+        QString parameter = "-q -F " + m_strPartionName;
+        if (!XSys::DiskUtil::FormatPartion(parameter)) {
             return false;
         }
     }
@@ -388,32 +389,8 @@ bool QtBaseInstaller::installBootload()
 bool QtBaseInstaller::extractISO()
 {
     qInfo() << "begin extract ISO to" << m_strPartionName;
-    XSys::SynExec("partprobe", m_strPartionName);
     m_progressStatus = GETINSTALLDIR;
-    //由于前面的命令中会自动挂载系统，而导致如果操作过快会获取挂载点为空，然后在后面再次进行挂载时又挂载失败。因此加一个延时，让系统内核状态同步完成。
-    int iTestCount = 3;
-    QString installDir;
-
-    do {
-        QThread::msleep(2000);
-        installDir = XSys::DiskUtil::MountPoint(m_strPartionName);
-
-        if (!installDir.isEmpty()) {
-            break;
-        }
-
-        iTestCount--;
-    } while(iTestCount > 0);
-
-    if (installDir.isEmpty()) {
-        XSys::DiskUtil::Mount(m_strPartionName);
-        installDir = XSys::DiskUtil::MountPoint(m_strPartionName);
-    }
-
-    if (installDir.isEmpty()) {
-        qCritical() << "Error::get(Error::USBMountFailed)";
-        return false;
-    }
+    XSys::SynExec("partprobe", m_strPartionName);
 
     if (m_bStop) {
        return true;
@@ -421,9 +398,9 @@ bool QtBaseInstaller::extractISO()
 
     qInfo() << "begin clear target device files";
     m_progressStatus = EXTRACTISO;
-    Utils::ClearTargetDev(installDir);
+    Utils::ClearTargetDev(m_strMountName);
     m_sevenZipCheck.setArchiveFile(m_strImage);
-    m_sevenZipCheck.setOutputDirectory(installDir);
+    m_sevenZipCheck.setOutputDirectory(m_strMountName);
     return m_sevenZipCheck.extract();
 }
 

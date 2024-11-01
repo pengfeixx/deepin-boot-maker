@@ -360,7 +360,7 @@ UsbSelectView::UsbSelectView(DWidget *parent) : DWidget(parent)
             ret = formatDialogSceneA.exec();
         }
         if (ret != 1) {
-            if (this->property("last_fstype").toString() == "vfat") {
+            if (this->property("last_fstype").toString() == "ext4") {
                 m_formatDiskCheck->setChecked(false);
                 this->setProperty("user_format", false);
                 handleFormat(false);
@@ -370,7 +370,7 @@ UsbSelectView::UsbSelectView(DWidget *parent) : DWidget(parent)
 
         m_start->setEnabled(false);
 #ifdef Q_OS_LINUX
-        if (!m_formatDiskCheck->isChecked() && "vfat" != this->property("last_fstype").toString())
+        if (!m_formatDiskCheck->isChecked() && "ext4" != this->property("last_fstype").toString())
         {
             emit finish(2, "install failed", tr("Disk Format Error: Please format the partition with FAT32"));
             return;

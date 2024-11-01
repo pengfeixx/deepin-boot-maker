@@ -51,7 +51,7 @@ QString SearchMoudle(const QString &moduleName)
 Result InstallBootloader(const QString &device)
 {
 #ifdef Q_OS_LINUX
-    return XSys::SynExec(XSys::FS::SearchBin("syslinux"), QString(" -i %1").arg(device));
+    return XSys::SynExec(XSys::FS::SearchBin("extlinux"), QString(" -i %1").arg(device));
 #else
     Q_UNUSED(device);
     return Result(Result::Success, "", "");

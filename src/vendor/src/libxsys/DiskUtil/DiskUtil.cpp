@@ -621,7 +621,7 @@ QString GetPartitionLabel(const QString &targetDev)
 
 bool FormatPartion(const QString& targetDev)
 {
-    return XSys::SynExec("mkfs.fat", targetDev).isSuccess();
+    return XSys::SynExec("mkfs.ext4", targetDev).isSuccess();
 }
 
 QStringList GetPartionOfDisk(const QString& strDisk)
